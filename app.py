@@ -1,46 +1,41 @@
-from PyQt6.QtWidgets import QApplication
-
-from ui import WindowMain, WindowAuth
 import sys
-import sqlite3
+
+from PyQt5 import QtWidgets
+import UI
 
 
-class Database:
+
+class AuthWindow(UI.Ui_AuthWindow):
     def __init__(self):
-        self.connection = sqlite3.connect("mailposts.db")
-        self.cursor = self.connection.cursor()
+        super().__init__()
+        self.setupUi(self)
 
-    def execute_read_query(self, query: str) -> list:
-        try:
-            self.cursor.execute(query)
-            data = self.cursor.fetchall()
-
-            print(f"Request \"{query}\" executed successfully!")
-            return data
-
-        except sqlite3.Error as error:
-            print(error)
-        finally:
-            if self.connection:
-                self.connection.close()
+    def user_auth(self):
+        pass
 
 
-
-
-class Application:
+class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
     def __init__(self):
-        self.app = QApplication(sys.argv)
-        self.database = Database()
-        self.window = WindowMain()
+        super().__init__()
+        self.setupUi(self)
 
-        self.window.show()
+        # Bind buttons:
+        self.MenuBar_Login.triggered.connect(self.menubar_auth)
+        self.MenuBar_Exit.triggered.connect(self.menubar_exit)
 
-        sys.exit(self.app.exec())
+    def menubar_auth(self):
+        print('login')
+
+    def menubar_exit(self):
+        print('exit')
 
 
-def main():
-    app = Application()
 
 if __name__ == '__main__':
-    main()
+    app = QtWidgets.QApplication([])
+    StartWindow = MainWindow()
+    StartWindow.show()
+
+    sys.exit(app.exec())
+
 

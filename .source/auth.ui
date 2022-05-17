@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>182</height>
+    <width>260</width>
+    <height>132</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
       <x>0</x>
       <y>0</y>
       <width>261</width>
-      <height>161</height>
+      <height>140</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -47,7 +47,7 @@
        <item>
         <layout class="QVBoxLayout" name="VB_LoginData" stretch="0,0">
          <property name="spacing">
-          <number>2</number>
+          <number>0</number>
          </property>
          <property name="topMargin">
           <number>0</number>
@@ -116,7 +116,6 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
