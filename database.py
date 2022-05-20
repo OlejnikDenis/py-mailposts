@@ -7,20 +7,6 @@ class Database:
         self.connection = sqlite3.connect("mailposts.db")
         self.cursor = self.connection.cursor()
 
-        try:
-            pass
-            # Create users table:
-            # table_users = """
-            # CREATE TABLE IF NOT EXISTS users (
-            # login VARCHAR(255) NOT NULL PRIMARY KEY,
-            # password VARCHAR(255) NOT NULL);
-            # """
-            # self.connection.execute(table_users)
-            # self.connection.commit()
-
-        except sqlite3.Error as err:
-            logger.exception(err)
-
     def execute_read_query(self, query: str) -> list:
         try:
             self.cursor.execute(query)
@@ -40,3 +26,10 @@ class Database:
         except sqlite3.Error as err:
             logger.exception(err)
 
+    # def dict_factory(self, row):
+    #     dictionary = dict()
+    #
+    #     for id, col in enumerate(self.cursor.description):
+    #         dictionary[col[0]] = row[id]
+    #
+    #     return dictionary
