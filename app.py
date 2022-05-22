@@ -1,14 +1,16 @@
 import sys
 
-
-from database import Database
-
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import Qt
-import UI
-
 from loguru import logger
 
+import UI
+import UI.window_edit
+from database import Database
+
+
+# TODO: Реализовать статы для текущей таблицы
+# TODO: Реализовать добавление/удаление строк таблицы
 
 # query = """SELECT master_unit.name, cities.name, office_index, customers
 #             FROM master_unit,
@@ -37,6 +39,10 @@ class CurrentSession:
         self.bUserAuthorized = False
 
 
+class RowsWindow(QtWidgets.QMainWindow, UI.Ui_RowsWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
 
 class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
@@ -79,7 +85,6 @@ class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
 
         if event.key() == QtCore.Qt.Key.Key_Return:
             self.validate_auth_data()
-            logger.info('enter')
             event.accept()
 
 
@@ -137,8 +142,30 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         return self.filters
 
     def search_by_filters(self):
+        # TODO: Исправить баг в логике поиска по БД (если есть и индекс и название города, то находится город)
+        # TODO: Исправить баг с поиском по чекбоксам: 'область' находится и в параметре 'автономная 'область'
+        # TODO: Исправить баг: если выделить все галки, то TableWidget будет пустым. Ожидались ВСЕ строки.
+        #                       Вероятно, необходимо заменить 'and' на 'or' при поиске по чекбоксам
+
         self.get_active_filters()
         params = list()
+        if self.filters['check_AutonomousRegion']:
+            params.append(f"instr(subject_name, 'автономная')")
+
+        if self.filters['check_AutonomousDistrict']:
+            params.append(f"instr(subject_name, 'округ')")
+
+        if self.filters['check_FederalCity']:
+            params.append(f"instr(subject_name, 'федерального')")
+
+        if self.filters['check_Region']:
+            params.append(f"instr(subject_name, 'край')")
+
+        if self.filters['check_Area']:
+            params.append(f"instr(subject_name, 'область')")
+
+        if self.filters['check_Republic']:
+            params.append(f"(instr(subject_name, 'республика') OR instr(subject_name, 'Республика'))")
 
         if self.filters['SubjectName']:
             params.append(f"instr(subject_name, '{self.filters['SubjectName'].capitalize()}') OR instr(subject_name, '{self.filters['SubjectName'].lower()}')")
@@ -148,7 +175,9 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
             params.append(f"instr(zipcode, '{self.filters['Zipcode']}')")
 
         result = [' AND '] * (len(params) * 2 - 1)
+        logger.warning(result)
         result[0::2] = params
+        logger.warning(result)
 
         query = f"SELECT * FROM mailposts WHERE {''.join(result)};"
         logger.debug(f"request: {query}")
@@ -171,9 +200,11 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         self.table_widget_init()
 
     def add_row(self):
-        # self.filters.get()
         if session.bUserAuthorized:
-            logger.debug('add row')
+            logger.debug("New window: RowsWindow")
+            self.RowsWindow = RowsWindow()
+            self.RowsWindow.show()
+
         else:
             logger.warning('You are not logged in.')
 
@@ -235,7 +266,4 @@ if __name__ == '__main__':
     StartWindow.show()
 
     sys.exit(app.exec())
-
-
-
 
