@@ -138,8 +138,20 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
 
     def search_by_filters(self):
         self.get_active_filters()
+        params = list()
 
-        query = f"""SELECT * FROM mailposts WHERE zipcode = {self.filters['Zipcode']}"""
+        if self.filters['SubjectName']:
+            params.append(f"instr(subject_name, '{self.filters['SubjectName'].capitalize()}') OR instr(subject_name, '{self.filters['SubjectName'].lower()}')")
+        if self.filters['CityName']:
+            params.append(f"instr(city_name, '{self.filters['CityName'].capitalize()}') OR instr(city_name, '{self.filters['CityName'].lower()}')")
+        if self.filters['Zipcode']:
+            params.append(f"instr(zipcode, '{self.filters['Zipcode']}')")
+
+        result = [' AND '] * (len(params) * 2 - 1)
+        result[0::2] = params
+
+        query = f"SELECT * FROM mailposts WHERE {''.join(result)};"
+        logger.debug(f"request: {query}")
         data = database.execute_read_query_dict(query)
         self.table_widget_update(data)
 
