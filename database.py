@@ -6,12 +6,12 @@ class Database:
     def __init__(self):
         self.connection = sqlite3.connect("mailposts.db")
         self.cursor = self.connection.cursor()
+        logger.info('Connection to database is established')
 
     def execute_read_query(self, query: str) -> list:
         try:
             self.cursor.execute(query)
             data = self.cursor.fetchall()
-            logger.debug(f"Request \"{query}\" executed successfully!")
             return data
 
         except sqlite3.Error as error:
@@ -22,14 +22,16 @@ class Database:
         try:
             self.cursor.execute(query)
             self.connection.commit()
-            logger.debug(f"Request \"{query}\" executed successfully!")
         except sqlite3.Error as err:
             logger.exception(err)
 
-    # def dict_factory(self, row):
-    #     dictionary = dict()
-    #
-    #     for id, col in enumerate(self.cursor.description):
-    #         dictionary[col[0]] = row[id]
-    #
-    #     return dictionary
+    def execute_read_query_dict(self, query: str) -> list:
+        try:
+            self.cursor.execute(query)
+            description = self.cursor.description
+
+            column_names = [col[0] for col in description]
+            data = [dict(zip(column_names, row)) for row in self.cursor.fetchall()]
+            return data
+        except sqlite3.Error as err:
+            logger.exception(err)
