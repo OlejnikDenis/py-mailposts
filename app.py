@@ -37,18 +37,6 @@ class CurrentSession:
         self.bUserAuthorized = False
 
 
-class Filters(QtWidgets.QMainWindow, UI.Ui_MainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.cb_Type_AutonomousRegion = self.checkBox_Type_AutonomousRegion.isChecked()
-        self.cb_Type_AutonomousDistrict = self.checkBox_Type_AutonomousDistrict.isChecked()
-        self.cb_Type_FederalCity = self.checkBox_Type_FederalCity.isChecked()
-        self.cb_Type_Region = self.checkBox_Type_Region.isChecked()
-        self.cb_Type_Area = self.checkBox_Type_Area.isChecked()
-        self.cb_Type_Republic = self.checkBox_Type_Republic.isChecked()
-
-        self.comboBox_SubjectName = self.comboBox_SubjectName.currentText()
 
 
 class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
@@ -100,7 +88,6 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         logger.debug('New window: Main')
         super().__init__()
         self.setupUi(self)
-        self.filters = Filters()
 
         # Set tableWidget:
         self.tableWidget.setColumnWidth(0, 175)
@@ -110,17 +97,69 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         self.tableWidget.setSortingEnabled(True)
 
         # Bind buttons:
+        # auth:
         self.MenuBar_Login.triggered.connect(self.menubar_auth)
         self.MenuBar_Exit.triggered.connect(self.menubar_exit)
+
+        # filters:
+        self.checkBox_Type_AutonomousRegion.toggled.connect(self.get_active_filters)
+        self.checkBox_Type_AutonomousDistrict.toggled.connect(self.get_active_filters)
+        self.checkBox_Type_FederalCity.toggled.connect(self.get_active_filters)
+        self.checkBox_Type_Region.toggled.connect(self.get_active_filters)
+        self.checkBox_Type_Area.toggled.connect(self.get_active_filters)
+        self.checkBox_Type_Republic.toggled.connect(self.get_active_filters)
+
+        self.pushButton_Find.clicked.connect(self.search_by_filters)
+        self.pushButton_Reset.clicked.connect(self.search_reset)
+
+        # rows:
         self.pushButton_RowAdd.clicked.connect(self.add_row)
         self.pushButton_RowEdit.clicked.connect(self.edit_row)
         self.pushButton_RowDel.clicked.connect(self.delete_row)
 
         # Basic calls:
-        self.init_tableWidget()
+        self.table_widget_init()
 
+        self.filters = dict()
+
+    def get_active_filters(self) -> dict:
+        self.filters['check_AutonomousRegion'] = self.checkBox_Type_AutonomousRegion.isChecked()
+        self.filters['check_AutonomousDistrict'] = self.checkBox_Type_AutonomousDistrict.isChecked()
+        self.filters['check_FederalCity'] = self.checkBox_Type_FederalCity.isChecked()
+        self.filters['check_Region'] = self.checkBox_Type_Region.isChecked()
+        self.filters['check_Area'] = self.checkBox_Type_Area.isChecked()
+        self.filters['check_Republic'] = self.checkBox_Type_Republic.isChecked()
+
+        self.filters['SubjectName'] = self.comboBox_SubjectName.currentText()
+        self.filters['CityName'] = self.comboBox_CityName.currentText()
+        self.filters['Zipcode'] = self.comboBox_Index.currentText()
+
+        return self.filters
+
+    def search_by_filters(self):
+        self.get_active_filters()
+
+        query = f"""SELECT * FROM mailposts WHERE zipcode = {self.filters['Zipcode']}"""
+        data = database.execute_read_query_dict(query)
+        self.table_widget_update(data)
+
+    def search_reset(self):
+        self.checkBox_Type_AutonomousRegion.setChecked(False)
+        self.checkBox_Type_AutonomousDistrict.setChecked(False)
+        self.checkBox_Type_FederalCity.setChecked(False)
+        self.checkBox_Type_Region.setChecked(False)
+        self.checkBox_Type_Area.setChecked(False)
+        self.checkBox_Type_Republic.setChecked(False)
+
+        self.comboBox_SubjectName.setCurrentText('')
+        self.comboBox_CityName.setCurrentText('')
+        self.comboBox_Index.setCurrentText('')
+
+        self.get_active_filters()
+        self.table_widget_init()
 
     def add_row(self):
+        # self.filters.get()
         if session.bUserAuthorized:
             logger.debug('add row')
         else:
@@ -149,25 +188,27 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         logger.info("'Exit' button triggered!")
         sys.exit()
 
-    def get_mailposts_count(self) -> int:
-        return int(database.execute_read_query("SELECT COUNT() FROM mailposts")[0][0])
+    def table_widget_update(self, data: list):
+        self.tableWidget.setRowCount(len(data))
 
-    def init_tableWidget(self):
-        self.tableWidget.setRowCount(self.get_mailposts_count())
-        data = database.execute_read_query_dict('SELECT * FROM mailposts')
-
-        for row in data:
+        for row_num, row in enumerate(data):
             item_index = QtWidgets.QTableWidgetItem()
-            item_index.setData(Qt.EditRole, int(row['index']))
+            item_index.setData(Qt.EditRole, int(row['zipcode']))
             item_customers = QtWidgets.QTableWidgetItem()
             item_customers.setData(Qt.EditRole, int(row['customers']))
 
-            self.tableWidget.setItem(row['id']-1, 0, QtWidgets.QTableWidgetItem(row['subject_name']))
-            self.tableWidget.setItem(row['id']-1, 1, QtWidgets.QTableWidgetItem(row['city_name']))
-            self.tableWidget.setItem(row['id']-1, 2, item_index)
-            self.tableWidget.setItem(row['id']-1, 3, item_customers)
+            self.tableWidget.setItem(row_num, 0, QtWidgets.QTableWidgetItem(row['subject_name']))
+            self.tableWidget.setItem(row_num, 1, QtWidgets.QTableWidgetItem(row['city_name']))
+            self.tableWidget.setItem(row_num, 2, item_index)
+            self.tableWidget.setItem(row_num, 3, item_customers)
 
-        logger.info('TableWidget is successfully loaded')
+        logger.debug('TableWidget updated!')
+
+    def table_widget_init(self):
+        data = database.execute_read_query_dict('SELECT * FROM mailposts')
+        self.table_widget_update(data)
+
+        logger.info('TableWidget is successfully initialized')
 
 
 if __name__ == '__main__':
