@@ -5,7 +5,6 @@ from PyQt5.QtCore import Qt
 from loguru import logger
 
 import UI
-import UI.window_edit
 from database import Database
 
 
@@ -120,7 +119,7 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         # rows:
         self.pushButton_RowAdd.clicked.connect(self.add_row)
         self.pushButton_RowEdit.clicked.connect(self.edit_row)
-        # self.pushButton_RowDel.clicked.connect(self.delete_row)
+        self.pushButton_RowDel.clicked.connect(self.delete_row)
 
         # Basic calls:
         self.table_widget_init()
@@ -212,6 +211,17 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         else:
             logger.warning('You are not logged in.')
 
+    def delete_row(self):
+        if session.bUserAuthorized:
+            pass
+        logger.debug('delete')
+        self.selected_row = self.tableWidget.currentRow()
+        if self.selected_row > -1:
+            self.selected_item_zipcode = self.tableWidget.item(self.selected_row, 2).text()
+            query = f"DELETE FROM mailposts WHERE zipcode = '{self.selected_item_zipcode}'"
+
+            logger.info(f'{self.selected_item_zipcode}, {query}')
+
     def menubar_auth(self):
         """Called when 'Login as administrator' is pressed"""
         logger.debug("New window: Authorization")
@@ -245,7 +255,6 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
             self._AvgCustomers_value = self._Customers_value / self._Mailposts_value
         else:
             self._AvgCustomers_value = 0
-            
         self.LE_Stats_UniqueSubjects.setText(_UniqueSubjects + str(self._UniqueSubjects_value))
         self.LE_Stats_Mailposts.setText(_Mailposts + str(self._Mailposts_value))
         self.LE_Stats_Customers.setText(_Customers + str(self._Customers_value))

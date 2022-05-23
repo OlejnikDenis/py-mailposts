@@ -6,250 +6,115 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
-    <height>442</height>
+    <width>265</width>
+    <height>257</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>8</y>
-      <width>185</width>
-      <height>303</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <layout class="QVBoxLayout" name="VBox_EditWindow_SubjectType" stretch="0,0,0,0,0,0,0">
-       <property name="spacing">
-        <number>2</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="L_SubjectTypeTitle">
-         <property name="text">
-          <string>Тип субъекта РФ</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_Type_AutonomousRegion">
-         <property name="text">
-          <string>Автономная область</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_Type_AutonomousDistrict">
-         <property name="text">
-          <string>Автономный округ</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_Type_FederalCity">
-         <property name="text">
-          <string>Город федерального значения</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_Type_Region">
-         <property name="text">
-          <string>Край</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_Type_Area">
-         <property name="text">
-          <string>Область</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_Type_Republic">
-         <property name="text">
-          <string>Республика</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="VBox_EditWindow_SubjectName">
-       <property name="spacing">
-        <number>2</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="L_SubjectNameTitle">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>Наименование субъекта РФ</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_SubjectName">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="toolTipDuration">
-          <number>-1</number>
-         </property>
-         <property name="statusTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string/>
-         </property>
-         <property name="editable">
-          <bool>true</bool>
-         </property>
-         <property name="currentText">
-          <string/>
-         </property>
-         <property name="insertPolicy">
-          <enum>QComboBox::InsertAlphabetically</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="VBox_EditWindow_CityName">
-       <property name="spacing">
-        <number>2</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="L_CityNameTitle">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>Наименование города</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_CityName">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="toolTipDuration">
-          <number>-1</number>
-         </property>
-         <property name="statusTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string/>
-         </property>
-         <property name="editable">
-          <bool>true</bool>
-         </property>
-         <property name="currentText">
-          <string/>
-         </property>
-         <property name="insertPolicy">
-          <enum>QComboBox::InsertAlphabetically</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="VBox_EditWindow_Index">
-       <property name="spacing">
-        <number>2</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="L_IndexTitle">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>Индекс</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_Index">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="toolTipDuration">
-          <number>-1</number>
-         </property>
-         <property name="statusTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string/>
-         </property>
-         <property name="editable">
-          <bool>true</bool>
-         </property>
-         <property name="currentText">
-          <string/>
-         </property>
-         <property name="insertPolicy">
-          <enum>QComboBox::InsertAlphabetically</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="VBox_EditWindow_Customers">
-       <property name="spacing">
-        <number>2</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="L_CustomersTitle">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>Клиенты отделения</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_Customers">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="toolTipDuration">
-          <number>-1</number>
-         </property>
-         <property name="statusTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string/>
-         </property>
-         <property name="editable">
-          <bool>true</bool>
-         </property>
-         <property name="currentText">
-          <string/>
-         </property>
-         <property name="insertPolicy">
-          <enum>QComboBox::InsertAlphabetically</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="2" column="0">
+       <layout class="QVBoxLayout" name="VBox_EditWindow_Index">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="L_IndexTitle">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Индекс</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LE_Index">
+          <property name="inputMethodHints">
+           <set>Qt::ImhDigitsOnly</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="0">
+       <layout class="QVBoxLayout" name="VBox_EditWindow_Customers">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="L_CustomersTitle">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Клиенты отделения</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LE_Customers">
+          <property name="inputMethodHints">
+           <set>Qt::ImhDigitsOnly</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <layout class="QVBoxLayout" name="VBox_EditWindow_CityName">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="L_CityNameTitle">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Наименование города</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LE_CityName"/>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="VBox_EditWindow_SubjectName">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="L_SubjectNameTitle">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Наименование субъекта РФ</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LE_SubjectName"/>
+        </item>
+       </layout>
+      </item>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Добавить</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
