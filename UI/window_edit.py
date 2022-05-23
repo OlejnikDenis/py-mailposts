@@ -12,10 +12,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_RowsWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(265, 257)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+    def setupUi(self, RowsWindow):
+        RowsWindow.setObjectName("RowsWindow")
+        RowsWindow.resize(274, 235)
+        self.centralwidget = QtWidgets.QWidget(RowsWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -29,7 +29,8 @@ class Ui_RowsWindow(object):
         self.L_IndexTitle.setObjectName("L_IndexTitle")
         self.VBox_EditWindow_Index.addWidget(self.L_IndexTitle)
         self.LE_Index = QtWidgets.QLineEdit(self.centralwidget)
-        self.LE_Index.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
+        self.LE_Index.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.LE_Index.setClearButtonEnabled(False)
         self.LE_Index.setObjectName("LE_Index")
         self.VBox_EditWindow_Index.addWidget(self.LE_Index)
         self.gridLayout.addLayout(self.VBox_EditWindow_Index, 2, 0, 1, 1)
@@ -71,19 +72,19 @@ class Ui_RowsWindow(object):
         self.pushButton.setObjectName("pushButton")
         self.gridLayout.addWidget(self.pushButton, 4, 0, 1, 1)
         self.horizontalLayout.addLayout(self.gridLayout)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        RowsWindow.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(RowsWindow)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        RowsWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(RowsWindow)
+        QtCore.QMetaObject.connectSlotsByName(RowsWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, RowsWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.L_IndexTitle.setText(_translate("MainWindow", "Индекс"))
-        self.L_CustomersTitle.setText(_translate("MainWindow", "Клиенты отделения"))
-        self.L_CityNameTitle.setText(_translate("MainWindow", "Наименование города"))
-        self.L_SubjectNameTitle.setText(_translate("MainWindow", "Наименование субъекта РФ"))
-        self.pushButton.setText(_translate("MainWindow", "Добавить"))
+        RowsWindow.setWindowTitle(_translate("RowsWindow", "Добавление данных"))
+        self.L_IndexTitle.setText(_translate("RowsWindow", "Индекс"))
+        self.L_CustomersTitle.setText(_translate("RowsWindow", "Клиенты отделения"))
+        self.L_CityNameTitle.setText(_translate("RowsWindow", "Наименование города"))
+        self.L_SubjectNameTitle.setText(_translate("RowsWindow", "Наименование субъекта РФ"))
+        self.pushButton.setText(_translate("RowsWindow", "Добавить"))

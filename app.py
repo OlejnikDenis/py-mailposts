@@ -1,4 +1,3 @@
-import sqlite3
 import sys
 
 from PyQt5 import QtWidgets, QtCore
@@ -105,7 +104,7 @@ class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
             event.accept()
 
 
-class ErrorWindow(QtWidgets.QWidget, UI.Ui_Dialog):
+class ErrorWindow(QtWidgets.QWidget, UI.Ui_ErrorDialog):
     def __init__(self, message: str):
         super().__init__()
         self.setupUi(self)
@@ -114,7 +113,6 @@ class ErrorWindow(QtWidgets.QWidget, UI.Ui_Dialog):
 
     def keyPressEvent(self, event) -> None:
         """Extending the method for simplified authorization"""
-
         if event.key() == QtCore.Qt.Key.Key_Return:
             self.close_window()
             self.close()

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>RowsWindow</class>
+ <widget class="QMainWindow" name="RowsWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>265</width>
-    <height>257</height>
+    <width>274</width>
+    <height>235</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Добавление данных</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -35,7 +35,10 @@
         <item>
          <widget class="QLineEdit" name="LE_Index">
           <property name="inputMethodHints">
-           <set>Qt::ImhDigitsOnly</set>
+           <set>Qt::ImhNone</set>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
           </property>
          </widget>
         </item>

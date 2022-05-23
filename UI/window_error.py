@@ -11,32 +11,32 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(293, 109)
-        self.horizontalLayout = QtWidgets.QHBoxLayout(Dialog)
+class Ui_ErrorDialog(object):
+    def setupUi(self, ErrorDialog):
+        ErrorDialog.setObjectName("ErrorDialog")
+        ErrorDialog.resize(293, 109)
+        self.horizontalLayout = QtWidgets.QHBoxLayout(ErrorDialog)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
-        self.label = QtWidgets.QLabel(Dialog)
+        self.label = QtWidgets.QLabel(ErrorDialog)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-        self.pushButton_closeErrWindow = QtWidgets.QPushButton(Dialog)
+        self.pushButton_closeErrWindow = QtWidgets.QPushButton(ErrorDialog)
         self.pushButton_closeErrWindow.setDefault(True)
         self.pushButton_closeErrWindow.setObjectName("pushButton_closeErrWindow")
         self.gridLayout.addWidget(self.pushButton_closeErrWindow, 1, 0, 1, 1)
         self.horizontalLayout.addLayout(self.gridLayout)
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.retranslateUi(ErrorDialog)
+        QtCore.QMetaObject.connectSlotsByName(ErrorDialog)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self, ErrorDialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "Error_text"))
-        self.pushButton_closeErrWindow.setText(_translate("Dialog", "Закрыть"))
+        ErrorDialog.setWindowTitle(_translate("ErrorDialog", "Dialog"))
+        self.label.setText(_translate("ErrorDialog", "Error_text"))
+        self.pushButton_closeErrWindow.setText(_translate("ErrorDialog", "Закрыть"))

@@ -15,7 +15,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(900, 733)
+        MainWindow.resize(900, 729)
         MainWindow.setStyleSheet("font: 10pt \"Arial\";")
         MainWindow.setLocale(QtCore.QLocale(QtCore.QLocale.Russian, QtCore.QLocale.Russia))
         MainWindow.setTabShape(QtWidgets.QTabWidget.Rounded)
