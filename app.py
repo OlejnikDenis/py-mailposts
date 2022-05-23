@@ -1,3 +1,4 @@
+import sqlite3
 import sys
 
 from PyQt5 import QtWidgets, QtCore
@@ -6,10 +7,9 @@ from PyQt5.QtGui import QIntValidator
 from loguru import logger
 
 import UI
-from database import Database
+from databasemanager import DatabaseManager
 
 
-# TODO: Реализовать статы для текущей таблицы
 # TODO: Реализовать добавление/удаление строк таблицы
 
 class CurrentSession:
@@ -35,22 +35,42 @@ class RowsWindow(QtWidgets.QMainWindow, UI.Ui_RowsWindow):
     def keyPressEvent(self, event) -> None:
         """Extending the method for simplified authorizatixon"""
         if event.key() == QtCore.Qt.Key.Key_Return:
-            self.validate_auth_data()
+            self.append_data()
             event.accept()
 
     def append_data(self):
-        self._subject_name = self.LE_SubjectName.text()
-        self._city_name = self.LE_CityName.text()
-        self._index = self.LE_Index.text()
-        self._customers = self.LE_Customers.text()
+        subject_name = self.LE_SubjectName.text()
+        city_name = self.LE_CityName.text()
+        zipcode = self.LE_Index.text()
+        customers = self.LE_Customers.text()
+
+        query = f"INSERT INTO mailposts ('subject_name', 'city_name', 'zipcode', 'customers') " \
+                f"VALUES ('{subject_name}', '{city_name}', '{zipcode}', '{customers}');"
+
+        zipcode_founded = len(database.execute_read_query(f"SELECT * FROM mailposts WHERE zipcode='{zipcode}'"))
+        if not zipcode_founded:
+            if subject_name and city_name and zipcode and customers:
+                database.execute_write_query(query)
+                logger.info('Row successfully added!')
+                self.LE_SubjectName.setText('')
+                self.LE_CityName.setText('')
+                self.LE_Index.setText('')
+                self.LE_Customers.setText('')
+
+                StartWindow.table_widget_init()
+            else:
+                self.errorWindow = ErrorWindow("Ошибка:\nНе все поля заполнены корректно")
+                self.errorWindow.show()
+        else:
+            self.errorWindow = ErrorWindow("Ошибка со стороны базы данных:\nВведён уже имеющийся индекс")
+            self.errorWindow.show()
+
 
 
 
 class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
     def __init__(self):
-        """
-        This class implements the user authorization window in the system.
-        """
+        """This class implements the user authorization window in the system. """
         super().__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(self.validate_auth_data)
@@ -68,24 +88,18 @@ class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
             logger.info(f'User ({data[0][0]}) is successfully logged on!')
 
             session.bUserAuthorized = True
-            session.UserName = data[0][0]
+            session.UserName = login
 
             self.close()
         else:
             logger.error('User authorization error!')
             session.bUserAuthorized = False
 
-            self.errorWindow = ErrorWindow("User authorization error!")
+            self.errorWindow = ErrorWindow("User authorization error:\nWrong password!")
             self.errorWindow.show()
-            # TODO: Отобразить сообщение (окно) с ошибкой авторизации
 
     def keyPressEvent(self, event) -> None:
         """Extending the method for simplified authorization"""
-        # modifiers = QtWidgets.QApplication.keyboardModifiers()
-
-        # if modifiers == (QtCore.Qt.KeyboardModifier.ShiftModifier | QtCore.Qt.Key.Key_Return):
-        #     logger.info('shift enter')
-
         if event.key() == QtCore.Qt.Key.Key_Return:
             self.validate_auth_data()
             event.accept()
@@ -132,9 +146,23 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         self.checkBox_Type_AutonomousRegion.toggled.connect(self.get_active_filters)
         self.checkBox_Type_AutonomousDistrict.toggled.connect(self.get_active_filters)
         self.checkBox_Type_FederalCity.toggled.connect(self.get_active_filters)
+
         self.checkBox_Type_Region.toggled.connect(self.get_active_filters)
         self.checkBox_Type_Area.toggled.connect(self.get_active_filters)
         self.checkBox_Type_Republic.toggled.connect(self.get_active_filters)
+
+        # TODO : HIDE
+        self.L_SubjectTypeTitle.hide()
+        self.checkBox_Type_AutonomousRegion.hide()
+        self.checkBox_Type_AutonomousDistrict.hide()
+        self.checkBox_Type_FederalCity.hide()
+        self.checkBox_Type_Region.hide()
+        self.checkBox_Type_Area.hide()
+        self.checkBox_Type_Republic.hide()
+        self.LE_Stats_Cities.hide()
+        self.LE_Stats_Customers.hide()
+        self.LE_Stats_AvgCustomers.hide()
+        self.LE_Stats_UniqueSubjects.hide()
 
         self.pushButton_Find.clicked.connect(self.search_by_filters)
         self.pushButton_Reset.clicked.connect(self.search_reset)
@@ -172,37 +200,37 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
 
         self.get_active_filters()
         params = list()
+        any_selected: bool = False
         if self.filters['check_AutonomousRegion']:
             params.append(f"instr(subject_name, 'автономная')")
-
         if self.filters['check_AutonomousDistrict']:
             params.append(f"instr(subject_name, 'округ')")
-
         if self.filters['check_FederalCity']:
             params.append(f"instr(subject_name, 'федерального')")
-
         if self.filters['check_Region']:
             params.append(f"instr(subject_name, 'край')")
-
         if self.filters['check_Area']:
             params.append(f"instr(subject_name, 'область')")
-
         if self.filters['check_Republic']:
             params.append(f"(instr(subject_name, 'республика') OR instr(subject_name, 'Республика'))")
 
         if self.filters['SubjectName']:
+            any_selected = True
             params.append(f"instr(subject_name, '{self.filters['SubjectName'].capitalize()}') OR instr(subject_name, '{self.filters['SubjectName'].lower()}')")
         if self.filters['CityName']:
+            any_selected = True
             params.append(f"instr(city_name, '{self.filters['CityName'].capitalize()}') OR instr(city_name, '{self.filters['CityName'].lower()}')")
         if self.filters['Zipcode']:
+            any_selected = True
             params.append(f"instr(zipcode, '{self.filters['Zipcode']}')")
 
         result = [' AND '] * (len(params) * 2 - 1)
         result[0::2] = params
 
         query = f"SELECT * FROM mailposts WHERE {''.join(result)};"
-        self.filtered_data = database.execute_read_query_dict(query)
-        self.table_widget_update(self.filtered_data)
+        if any_selected:
+            self.filtered_data = database.execute_read_query_dict(query)
+            self.table_widget_update(self.filtered_data)
 
     def search_reset(self):
         self.checkBox_Type_AutonomousRegion.setChecked(False)
@@ -268,6 +296,7 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         sys.exit()
 
     def update_stats(self, data):
+        pass
         _UniqueSubjects = 'Уникальных субъектов: '
         _Mailposts = "Почтовых отделений: "
         _Customers = "Количество клиентов: "
@@ -309,14 +338,12 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
             self.tableWidget.setItem(row_num, 2, item_index)
             self.tableWidget.setItem(row_num, 3, item_customers)
 
-        logger.debug('TableWidget updated!')
+        logger.info('TableWidget updated!')
         self.update_stats(data)
 
     def table_widget_init(self):
         data = database.execute_read_query_dict('SELECT * FROM mailposts')
         self.table_widget_update(data)
-
-        logger.info('TableWidget is successfully initialized')
 
 
 if __name__ == '__main__':
@@ -325,7 +352,7 @@ if __name__ == '__main__':
 
     app = QtWidgets.QApplication([])
     session = CurrentSession()
-    database = Database()
+    database = DatabaseManager()
 
     StartWindow = MainWindow()
     StartWindow.show()

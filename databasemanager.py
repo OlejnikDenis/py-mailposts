@@ -2,7 +2,7 @@ import sqlite3
 from loguru import logger
 
 
-class Database:
+class DatabaseManager:
     def __init__(self):
         self.connection = sqlite3.connect("mailposts.db")
         self.cursor = self.connection.cursor()
