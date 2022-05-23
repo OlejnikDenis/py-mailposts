@@ -37,6 +37,6 @@ class Ui_ErrorDialog(object):
 
     def retranslateUi(self, ErrorDialog):
         _translate = QtCore.QCoreApplication.translate
-        ErrorDialog.setWindowTitle(_translate("ErrorDialog", "Dialog"))
+        ErrorDialog.setWindowTitle(_translate("ErrorDialog", "Ошибка"))
         self.label.setText(_translate("ErrorDialog", "Error_text"))
         self.pushButton_closeErrWindow.setText(_translate("ErrorDialog", "Закрыть"))

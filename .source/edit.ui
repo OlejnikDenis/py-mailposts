@@ -91,7 +91,7 @@
       <item row="4" column="0">
        <widget class="QPushButton" name="pushButton_EditRow">
         <property name="text">
-         <string>Добавить</string>
+         <string>Изменить</string>
         </property>
        </widget>
       </item>

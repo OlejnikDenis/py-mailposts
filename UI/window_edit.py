@@ -86,5 +86,5 @@ class Ui_EditRowsWindow(object):
         self.L_EditRow_CustomersTitle.setText(_translate("EditRowsWindow", "Клиенты отделения"))
         self.L_EditRow_CityNameTitle.setText(_translate("EditRowsWindow", "Наименование города"))
         self.L_EditRow_ZipcodeTitle.setText(_translate("EditRowsWindow", "Индекс"))
-        self.pushButton_EditRow.setText(_translate("EditRowsWindow", "Добавить"))
+        self.pushButton_EditRow.setText(_translate("EditRowsWindow", "Изменить"))
         self.L_EditRow_SubjectNameTitle.setText(_translate("EditRowsWindow", "Наименование субъекта РФ"))
