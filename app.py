@@ -64,7 +64,7 @@ class RowsWindow(QtWidgets.QMainWindow, UI.Ui_AddRowsWindow):
 
 
 class EditRowsWindow(QtWidgets.QMainWindow, UI.Ui_EditRowsWindow):
-    def __init__(self, selected_row):
+    def __init__(self, selected_row_zipcode):
         super().__init__()
         self.setupUi(self)
 
@@ -72,19 +72,40 @@ class EditRowsWindow(QtWidgets.QMainWindow, UI.Ui_EditRowsWindow):
         self.LE_EditRow_Zipcode.setValidator(QIntValidator())
         self.LE_EditRow_Customers.setValidator(QIntValidator())
 
-        logger.info(selected_row)
+        data = database.execute_read_query_dict(f"SELECT * FROM mailposts WHERE zipcode = {selected_row_zipcode}")
 
-        # self.LE_SubjectName.placeholderText()
+        self.LE_EditRow_SubjectName.setText(str(data[0]['subject_name']))
+        self.LE_EditRow_CityName.setText(str(data[0]['city_name']))
+        self.LE_EditRow_Zipcode.setText(str(data[0]['zipcode']))
+        self.LE_EditRow_Customers.setText(str(data[0]['customers']))
 
     def edit_rowdata(self):
-        logger.warning('WIP')
+        subject_name = self.LE_EditRow_SubjectName.text()
+        city_name = self.LE_EditRow_CityName.text()
+        zipcode = self.LE_EditRow_Zipcode.text()
+        customers = self.LE_EditRow_Customers.text()
 
+        query_add = f"INSERT INTO mailposts ('subject_name', 'city_name', 'zipcode', 'customers') " \
+                    f"VALUES ('{subject_name}', '{city_name}', '{zipcode}', '{customers}');"
+        query_del = f"DELETE FROM mailposts WHERE zipcode='{zipcode}'"
+
+        if subject_name and city_name and zipcode and customers:
+            database.execute_write_query(query_del)
+            database.execute_write_query(query_add)
+
+            logger.info('Row successfully changed!')
+
+            StartWindow.table_widget_init()
+        else:
+            self.errorWindow = ErrorWindow("Ошибка:\nНе все поля заполнены корректно")
+            self.errorWindow.show()
 
     def keyPressEvent(self, event) -> None:
-        """Extending the method for simplified authorizatixon"""
+        """Extending the method for simplified editing"""
         if event.key() == QtCore.Qt.Key.Key_Return:
             self.edit_rowdata()
             event.accept()
+
 
 class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
     def __init__(self):
@@ -264,13 +285,13 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
             self.errorWindow.show()
 
     def edit_row(self):
-        selected_row = self.tableWidget.currentRow()
+        selected_row_zipcode = self.tableWidget.item(self.tableWidget.currentRow(), 2).text()
 
         if session.bUserAuthorized:
-            if selected_row > -1:
+            if selected_row_zipcode:
                 logger.debug("New window: AddRowsWindow")
 
-                self.EditRowsWindow = EditRowsWindow(selected_row)
+                self.EditRowsWindow = EditRowsWindow(selected_row_zipcode)
                 self.EditRowsWindow.show()
             else:
                 logger.warning('The row was not selected')
