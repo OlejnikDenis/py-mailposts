@@ -120,7 +120,7 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         # rows:
         self.pushButton_RowAdd.clicked.connect(self.add_row)
         self.pushButton_RowEdit.clicked.connect(self.edit_row)
-        self.pushButton_RowDel.clicked.connect(self.delete_row)
+        # self.pushButton_RowDel.clicked.connect(self.delete_row)
 
         # Basic calls:
         self.table_widget_init()
@@ -135,9 +135,10 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         self.filters['check_Area'] = self.checkBox_Type_Area.isChecked()
         self.filters['check_Republic'] = self.checkBox_Type_Republic.isChecked()
 
-        self.filters['SubjectName'] = self.comboBox_SubjectName.currentText()
-        self.filters['CityName'] = self.comboBox_CityName.currentText()
-        self.filters['Zipcode'] = self.comboBox_Index.currentText()
+        # self.filters['SubjectName'] = self.comboBox_SubjectName.currentText()
+        self.filters['SubjectName'] = self.comboBox_SubjectName.text()
+        self.filters['CityName'] = self.comboBox_CityName.text()
+        self.filters['Zipcode'] = self.comboBox_Index.text()
 
         return self.filters
 
@@ -175,12 +176,9 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
             params.append(f"instr(zipcode, '{self.filters['Zipcode']}')")
 
         result = [' AND '] * (len(params) * 2 - 1)
-        logger.warning(result)
         result[0::2] = params
-        logger.warning(result)
 
         query = f"SELECT * FROM mailposts WHERE {''.join(result)};"
-        logger.debug(f"request: {query}")
         data = database.execute_read_query_dict(query)
         self.table_widget_update(data)
 
@@ -192,9 +190,9 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         self.checkBox_Type_Area.setChecked(False)
         self.checkBox_Type_Republic.setChecked(False)
 
-        self.comboBox_SubjectName.setCurrentText('')
-        self.comboBox_CityName.setCurrentText('')
-        self.comboBox_Index.setCurrentText('')
+        self.comboBox_SubjectName.setText('')
+        self.comboBox_CityName.setText('')
+        self.comboBox_Index.setText('')
 
         self.get_active_filters()
         self.table_widget_init()
@@ -214,12 +212,6 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         else:
             logger.warning('You are not logged in.')
 
-    def delete_row(self):
-        if session.bUserAuthorized:
-            logger.debug('delete row')
-        else:
-            logger.warning('You are not logged in.')
-
     def menubar_auth(self):
         """Called when 'Login as administrator' is pressed"""
         logger.debug("New window: Authorization")
@@ -230,6 +222,35 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         """Called when 'Exit' is pressed"""
         logger.info("'Exit' button triggered!")
         sys.exit()
+
+    def update_stats(self, data):
+        _UniqueSubjects = 'Уникальных субъектов: '
+        _Mailposts = "Почтовых отделений: "
+        _Customers = "Количество клиентов: "
+        _Cities = "Населённых пунктов: "
+        _AvgCustomers = "Ср. количество клиентов: "
+
+        self._UniqueSubjects_list = list(({item['subject_name']: item for item in data}.values()))
+        self._Mailposts_list = list(({item['zipcode']: item for item in data}.values()))
+        self._Customers_value = 0
+        for row in data:
+            self._Customers_value += row['customers']
+
+        self._Cities_list = list(({item['city_name']: item for item in data}.values()))
+
+        self._UniqueSubjects_value = len(self._UniqueSubjects_list)
+        self._Mailposts_value = len(self._Mailposts_list)
+        self._Cities_value = len(self._Cities_list)
+        if self._Mailposts_value:
+            self._AvgCustomers_value = self._Customers_value / self._Mailposts_value
+        else:
+            self._AvgCustomers_value = 0
+            
+        self.LE_Stats_UniqueSubjects.setText(_UniqueSubjects + str(self._UniqueSubjects_value))
+        self.LE_Stats_Mailposts.setText(_Mailposts + str(self._Mailposts_value))
+        self.LE_Stats_Customers.setText(_Customers + str(self._Customers_value))
+        self.LE_Stats_Cities.setText(_Cities + str(self._Cities_value))
+        self.LE_Stats_AvgCustomers.setText(_AvgCustomers + str(int(self._AvgCustomers_value)))
 
     def table_widget_update(self, data: list):
         self.tableWidget.setRowCount(len(data))
@@ -246,6 +267,7 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
             self.tableWidget.setItem(row_num, 3, item_customers)
 
         logger.debug('TableWidget updated!')
+        self.update_stats(data)
 
     def table_widget_init(self):
         data = database.execute_read_query_dict('SELECT * FROM mailposts')

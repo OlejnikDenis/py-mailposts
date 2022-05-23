@@ -26,471 +26,392 @@
    <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>901</width>
-      <height>689</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,0,5">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMaximumSize</enum>
-     </property>
-     <item>
-      <layout class="QVBoxLayout" name="VBox_Filters" stretch="0,0,0,0,0,0,0,0,0,0">
-       <property name="spacing">
-        <number>20</number>
-       </property>
-       <property name="leftMargin">
-        <number>10</number>
-       </property>
-       <property name="topMargin">
-        <number>10</number>
-       </property>
-       <property name="rightMargin">
-        <number>10</number>
-       </property>
-       <property name="bottomMargin">
-        <number>10</number>
-       </property>
-       <item>
-        <layout class="QVBoxLayout" name="VBox_SubjectType" stretch="0,0,0,0,0,0,0">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="L_SubjectTypeTitle">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,0,5">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
+      <item>
+       <layout class="QVBoxLayout" name="VBox_Filters" stretch="0,0,0,0,0,0,0,0,0,0">
+        <property name="spacing">
+         <number>20</number>
+        </property>
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="VBox_SubjectType" stretch="0,0,0,0,0,0,0">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="L_SubjectTypeTitle">
+            <property name="text">
+             <string>Тип субъекта РФ</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_Type_AutonomousRegion">
+            <property name="text">
+             <string>Автономная область</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_Type_AutonomousDistrict">
+            <property name="text">
+             <string>Автономный округ</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_Type_FederalCity">
+            <property name="text">
+             <string>Город федерального значения</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_Type_Region">
+            <property name="text">
+             <string>Край</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_Type_Area">
+            <property name="text">
+             <string>Область</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_Type_Republic">
+            <property name="text">
+             <string>Республика</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="VBox_SubjectName">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="L_SubjectNameTitle">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>Наименование субъекта РФ</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="comboBox_SubjectName"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="VBox_CityName">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="L_CityNameTitle">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>Наименование города</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="comboBox_CityName"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="VBox_Index">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="L_IndexTitle">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>Индекс</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="comboBox_Index"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="VBox_SearchButtons">
+          <item>
+           <layout class="QHBoxLayout" name="HBox_Buttons">
+            <item>
+             <widget class="QPushButton" name="pushButton_Reset">
+              <property name="text">
+               <string>Сбросить</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_Find">
+              <property name="text">
+               <string>Найти</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="Horizintal_Line_TOP">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="VBox_EditButtons">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="L_CityNameTitle_2">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>Редактирование данных</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="HBox_EditButtons">
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="pushButton_RowAdd">
+              <property name="text">
+               <string>Добавить</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_RowEdit">
+              <property name="text">
+               <string>Изменить</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="Horizintal_Line_TOP_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="VBox_Stats">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLineEdit" name="LE_Stats_UniqueSubjects">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Уникальных субъектов: 3</string>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="LE_Stats_Mailposts">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Почтовых отделений: 6</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="LE_Stats_Customers">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Количество клиентов: 2213</string>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="LE_Stats_Cities">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Населённых пунктов: 4</string>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="LE_Stats_AvgCustomers">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Ср. количество клиентов: 368</string>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="Vertical_Line">
+        <property name="lineWidth">
+         <number>1</number>
+        </property>
+        <property name="midLineWidth">
+         <number>0</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="VBox_Table">
+        <item>
+         <widget class="QTableWidget" name="tableWidget">
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="cornerButtonEnabled">
+           <bool>true</bool>
+          </property>
+          <property name="rowCount">
+           <number>0</number>
+          </property>
+          <property name="columnCount">
+           <number>4</number>
+          </property>
+          <column>
            <property name="text">
-            <string>Тип субъекта РФ</string>
+            <string>Субъект</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_Type_AutonomousRegion">
+          </column>
+          <column>
            <property name="text">
-            <string>Автономная область</string>
+            <string>Населённый пункт</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_Type_AutonomousDistrict">
-           <property name="text">
-            <string>Автономный округ</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_Type_FederalCity">
-           <property name="text">
-            <string>Город федерального значения</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_Type_Region">
-           <property name="text">
-            <string>Край</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_Type_Area">
-           <property name="text">
-            <string>Область</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_Type_Republic">
-           <property name="text">
-            <string>Республика</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="VBox_SubjectName">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="L_SubjectNameTitle">
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="text">
-            <string>Наименование субъекта РФ</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_SubjectName">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="toolTipDuration">
-            <number>-1</number>
-           </property>
-           <property name="statusTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-           <property name="currentText">
-            <string/>
-           </property>
-           <property name="insertPolicy">
-            <enum>QComboBox::InsertAlphabetically</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="VBox_CityName">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="L_CityNameTitle">
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="text">
-            <string>Наименование города</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_CityName">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="toolTipDuration">
-            <number>-1</number>
-           </property>
-           <property name="statusTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-           <property name="currentText">
-            <string/>
-           </property>
-           <property name="insertPolicy">
-            <enum>QComboBox::InsertAlphabetically</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="VBox_Index">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="L_IndexTitle">
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
+          </column>
+          <column>
            <property name="text">
             <string>Индекс</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_Index">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="toolTipDuration">
-            <number>-1</number>
-           </property>
-           <property name="statusTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-           <property name="currentText">
-            <string/>
-           </property>
-           <property name="insertPolicy">
-            <enum>QComboBox::InsertAlphabetically</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="VBox_SearchButtons">
-         <item>
-          <layout class="QHBoxLayout" name="HBox_Buttons">
-           <item>
-            <widget class="QPushButton" name="pushButton_Reset">
-             <property name="text">
-              <string>Сбросить</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_Find">
-             <property name="text">
-              <string>Найти</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="Line" name="Horizintal_Line_TOP">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="VBox_EditButtons">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="L_CityNameTitle_2">
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
+          </column>
+          <column>
            <property name="text">
-            <string>Редактирование данных</string>
+            <string>Количество клиентов</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="HBox_EditButtons">
-           <property name="topMargin">
-            <number>10</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="pushButton_RowAdd">
-             <property name="text">
-              <string>ADD</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_RowEdit">
-             <property name="text">
-              <string>EDIT</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_RowDel">
-             <property name="text">
-              <string>DEL</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="Line" name="Horizintal_Line_TOP_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="VBox_Stats">
-         <property name="spacing">
-          <number>3</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLineEdit" name="LE_Stats_UniqueSubjects">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Уникальных субъектов: 3</string>
-           </property>
-           <property name="frame">
-            <bool>true</bool>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="LE_Stats_Mailposts">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Почтовых отделений: 6</string>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="LE_Stats_Customers">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Количество клиентов: 2213</string>
-           </property>
-           <property name="frame">
-            <bool>true</bool>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="LE_Stats_Cities">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Населённых пунктов: 4</string>
-           </property>
-           <property name="frame">
-            <bool>true</bool>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="LE_Stats_AvgCustomers">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Ср. количество клиентов: 368</string>
-           </property>
-           <property name="frame">
-            <bool>true</bool>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="Line" name="Vertical_Line">
-       <property name="lineWidth">
-        <number>1</number>
-       </property>
-       <property name="midLineWidth">
-        <number>0</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="VBox_Table">
-       <item>
-        <widget class="QTableWidget" name="tableWidget">
-         <property name="sortingEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="cornerButtonEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="rowCount">
-          <number>0</number>
-         </property>
-         <property name="columnCount">
-          <number>4</number>
-         </property>
-         <column>
-          <property name="text">
-           <string>Субъект</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Населённый пункт</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Индекс</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Количество клиентов</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
