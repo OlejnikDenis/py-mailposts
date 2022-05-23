@@ -2,6 +2,7 @@ import sys
 
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIntValidator
 from loguru import logger
 
 import UI
@@ -11,23 +12,6 @@ from database import Database
 # TODO: Реализовать статы для текущей таблицы
 # TODO: Реализовать добавление/удаление строк таблицы
 
-# query = """SELECT master_unit.name, cities.name, office_index, customers
-#             FROM master_unit,
-#             INNER JOIN cities ON master_unit.id = cities.master_id
-#             INNER JOIN post_offices ON master_unit.id = post_offices"""
-# data = self.database.execute_read_query(query)
-#
-# def get_subject_fullnames(self):
-#     query = """SELECT master_unit.name, subject_types.name
-#                 FROM master_unit
-#                 INNER JOIN subject_types ON master_unit.type = subject_types.id;"""
-#     data = self.database.execute_read_query(query)
-#
-#     for item, row_data in enumerate(data):
-#         data[item] = f"{row_data[0]} {row_data[1]}"
-#     return data
-
-
 class CurrentSession:
     def __init__(self):
         """
@@ -36,12 +20,30 @@ class CurrentSession:
         logger.info('User session initialized')
         self.UserName = None
         self.bUserAuthorized = False
+        self.ErrorMessage = ''
 
 
 class RowsWindow(QtWidgets.QMainWindow, UI.Ui_RowsWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.pushButton.clicked.connect(self.append_data)
+        self.onlyInt = QIntValidator()
+        self.LE_Index.setValidator(self.onlyInt)
+        self.LE_Customers.setValidator(self.onlyInt)
+
+    def keyPressEvent(self, event) -> None:
+        """Extending the method for simplified authorizatixon"""
+        if event.key() == QtCore.Qt.Key.Key_Return:
+            self.validate_auth_data()
+            event.accept()
+
+    def append_data(self):
+        self._subject_name = self.LE_SubjectName.text()
+        self._city_name = self.LE_CityName.text()
+        self._index = self.LE_Index.text()
+        self._customers = self.LE_Customers.text()
+
 
 
 class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
@@ -73,6 +75,8 @@ class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
             logger.error('User authorization error!')
             session.bUserAuthorized = False
 
+            self.errorWindow = ErrorWindow("User authorization error!")
+            self.errorWindow.show()
             # TODO: Отобразить сообщение (окно) с ошибкой авторизации
 
     def keyPressEvent(self, event) -> None:
@@ -85,6 +89,25 @@ class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
         if event.key() == QtCore.Qt.Key.Key_Return:
             self.validate_auth_data()
             event.accept()
+
+
+class ErrorWindow(QtWidgets.QWidget, UI.Ui_Dialog):
+    def __init__(self, message: str):
+        super().__init__()
+        self.setupUi(self)
+        self.label.setText(message)
+        self.pushButton_closeErrWindow.clicked.connect(self.close_window)
+
+    def keyPressEvent(self, event) -> None:
+        """Extending the method for simplified authorization"""
+
+        if event.key() == QtCore.Qt.Key.Key_Return:
+            self.close_window()
+            self.close()
+
+    def close_window(self):
+        self.close()
+
 
 
 class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
@@ -178,8 +201,8 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         result[0::2] = params
 
         query = f"SELECT * FROM mailposts WHERE {''.join(result)};"
-        data = database.execute_read_query_dict(query)
-        self.table_widget_update(data)
+        self.filtered_data = database.execute_read_query_dict(query)
+        self.table_widget_update(self.filtered_data)
 
     def search_reset(self):
         self.checkBox_Type_AutonomousRegion.setChecked(False)
@@ -204,29 +227,40 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
 
         else:
             logger.warning('You are not logged in.')
+            self.errorWindow = ErrorWindow("You are not logged in!")
+            self.errorWindow.show()
 
     def edit_row(self):
         if session.bUserAuthorized:
             logger.debug('edit row')
         else:
             logger.warning('You are not logged in.')
+            self.errorWindow = ErrorWindow("You are not logged in!")
+            self.errorWindow.show()
 
     def delete_row(self):
-        if session.bUserAuthorized:
-            pass
-        logger.debug('delete')
-        self.selected_row = self.tableWidget.currentRow()
-        if self.selected_row > -1:
-            self.selected_item_zipcode = self.tableWidget.item(self.selected_row, 2).text()
-            query = f"DELETE FROM mailposts WHERE zipcode = '{self.selected_item_zipcode}'"
+        try:
+            if session.bUserAuthorized:
+                self.selected_row = self.tableWidget.currentRow()
+                if self.selected_row > -1:
+                    self.selected_item_zipcode = self.tableWidget.item(self.selected_row, 2).text()
+                    query = f"DELETE FROM mailposts WHERE zipcode = '{self.selected_item_zipcode}'"
+                    database.execute_write_query(query)
 
-            logger.info(f'{self.selected_item_zipcode}, {query}')
+                    logger.info(f'Succesfully deleted row with zipcode "{self.selected_item_zipcode}"')
+                    self.table_widget_init()
+            else:
+                self.errorWindow = ErrorWindow("You are not authorized!")
+                self.errorWindow.show()
+        except Exception as err:
+            logger.exception(err)
 
     def menubar_auth(self):
         """Called when 'Login as administrator' is pressed"""
         logger.debug("New window: Authorization")
         self.AuthWindow = AuthWindow()
         self.AuthWindow.show()
+
 
     def menubar_exit(self):
         """Called when 'Exit' is pressed"""
