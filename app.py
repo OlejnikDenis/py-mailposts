@@ -16,7 +16,7 @@ class CurrentSession:
         """
         logger.info('User session initialized')
         self.UserName = None
-        self.bUserAuthorized = True
+        self.bUserAuthorized = False
         self.ErrorMessage = ''
 
 
@@ -93,7 +93,7 @@ class EditRowsWindow(QtWidgets.QMainWindow, UI.Ui_EditRowsWindow):
             database.execute_write_query(query_del)
             database.execute_write_query(query_add)
 
-            logger.info('Row successfully changed!')
+            logger.info(f'Succesfully changed row with zipcode "{zipcode}"')
 
             StartWindow.table_widget_init()
         else:
@@ -134,7 +134,7 @@ class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
             logger.error('User authorization error!')
             session.bUserAuthorized = False
 
-            self.errorWindow = ErrorWindow("User authorization error:\nWrong password!")
+            self.errorWindow = ErrorWindow("Ошибка входа:\nНеверный логин или пароль!")
             self.errorWindow.show()
 
     def keyPressEvent(self, event) -> None:
@@ -217,11 +217,6 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         return self.filters
 
     def search_by_filters(self):
-        # TODO: Исправить баг в логике поиска по БД (если есть и индекс и название города, то находится город)
-        # TODO: Исправить баг с поиском по чекбоксам: 'область' находится и в параметре 'автономная 'область'
-        # TODO: Исправить баг: если выделить все галки, то TableWidget будет пустым. Ожидались ВСЕ строки.
-        #                       Вероятно, необходимо заменить 'and' на 'or' при поиске по чекбоксам
-
         self.get_active_filters()
         params = list()
         any_selected: bool = False
@@ -253,7 +248,6 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         result[0::2] = params
 
         query = f"SELECT * FROM mailposts WHERE {''.join(result)};"
-        logger.warning(query)
         if any_selected:
             filtered_data = database.execute_read_query_dict(query)
             self.table_widget_update(filtered_data)
@@ -281,25 +275,27 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
             self.AddRowsWindow.show()
         else:
             logger.warning('You are not logged in.')
-            self.errorWindow = ErrorWindow("You are not logged in!")
+            self.errorWindow = ErrorWindow("Ошибка:\nВы не авторизованы как администратор")
             self.errorWindow.show()
 
     def edit_row(self):
-        selected_row_zipcode = self.tableWidget.item(self.tableWidget.currentRow(), 2).text()
 
         if session.bUserAuthorized:
-            if selected_row_zipcode:
-                logger.debug("New window: AddRowsWindow")
+            if self.tableWidget.currentRow() > -1:
+                selected_row_zipcode = self.tableWidget.item(self.tableWidget.currentRow(), 2).text()
 
-                self.EditRowsWindow = EditRowsWindow(selected_row_zipcode)
-                self.EditRowsWindow.show()
+                if selected_row_zipcode:
+                    logger.debug("New window: AddRowsWindow")
+
+                    self.EditRowsWindow = EditRowsWindow(selected_row_zipcode)
+                    self.EditRowsWindow.show()
             else:
                 logger.warning('The row was not selected')
-                self.errorWindow = ErrorWindow("The row was not selected")
+                self.errorWindow = ErrorWindow("Строка не выбрана")
                 self.errorWindow.show()
         else:
             logger.warning('You are not logged in.')
-            self.errorWindow = ErrorWindow("You are not logged in!")
+            self.errorWindow = ErrorWindow("Ошибка:\nВы не авторизованы как администратор")
             self.errorWindow.show()
 
     def delete_row(self):
@@ -314,7 +310,7 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
                     logger.info(f'Succesfully deleted row with zipcode "{selected_item_zipcode}"')
                     self.table_widget_init()
             else:
-                self.errorWindow = ErrorWindow("You are not authorized!")
+                self.errorWindow = ErrorWindow("Ошибка:\nВы не авторизованы как администратор")
                 self.errorWindow.show()
         except Exception as err:
             logger.exception(err)
