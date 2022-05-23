@@ -1,73 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EditRowsWindow</class>
- <widget class="QMainWindow" name="EditRowsWindow">
+ <class>RowsWindow</class>
+ <widget class="QMainWindow" name="RowsWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>263</width>
+    <width>274</width>
     <height>235</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Редактор данных</string>
+   <string>Добавление данных</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="3" column="0">
-       <layout class="QVBoxLayout" name="VBox_EditRows_Customers">
-        <property name="spacing">
-         <number>2</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="L_EditRow_CustomersTitle">
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="text">
-           <string>Клиенты отделения</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="LE_EditRow_Customers">
-          <property name="inputMethodHints">
-           <set>Qt::ImhDigitsOnly</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0">
-       <layout class="QVBoxLayout" name="VBox_EditRows_CityName">
-        <property name="spacing">
-         <number>2</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="L_EditRow_CityNameTitle">
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="text">
-           <string>Наименование города</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="LE_EditRow_CityName"/>
-        </item>
-       </layout>
-      </item>
       <item row="2" column="0">
-       <layout class="QVBoxLayout" name="VBox_EditRows_Zipcode">
+       <layout class="QVBoxLayout" name="VBox_EditWindow_Index">
         <property name="spacing">
          <number>2</number>
         </property>
         <item>
-         <widget class="QLabel" name="L_EditRow_ZipcodeTitle">
+         <widget class="QLabel" name="L_IndexTitle">
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -77,7 +33,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LE_EditRow_Zipcode">
+         <widget class="QLineEdit" name="LE_Index">
           <property name="inputMethodHints">
            <set>Qt::ImhNone</set>
           </property>
@@ -88,20 +44,57 @@
         </item>
        </layout>
       </item>
-      <item row="4" column="0">
-       <widget class="QPushButton" name="pushButton_EditRow">
-        <property name="text">
-         <string>Добавить</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <layout class="QVBoxLayout" name="VBox_EditRows_SubjectName">
+      <item row="3" column="0">
+       <layout class="QVBoxLayout" name="VBox_EditWindow_Customers">
         <property name="spacing">
          <number>2</number>
         </property>
         <item>
-         <widget class="QLabel" name="L_EditRow_SubjectNameTitle">
+         <widget class="QLabel" name="L_CustomersTitle">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Клиенты отделения</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LE_Customers">
+          <property name="inputMethodHints">
+           <set>Qt::ImhDigitsOnly</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <layout class="QVBoxLayout" name="VBox_EditWindow_CityName">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="L_CityNameTitle">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Наименование города</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LE_CityName"/>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="VBox_EditWindow_SubjectName">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="L_SubjectNameTitle">
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -111,9 +104,16 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LE_EditRow_SubjectName"/>
+         <widget class="QLineEdit" name="LE_SubjectName"/>
         </item>
        </layout>
+      </item>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Добавить</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

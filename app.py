@@ -9,8 +9,6 @@ import UI
 from databasemanager import DatabaseManager
 
 
-# TODO: Реализовать добавление/удаление строк таблицы
-
 class CurrentSession:
     def __init__(self):
         """
@@ -18,11 +16,11 @@ class CurrentSession:
         """
         logger.info('User session initialized')
         self.UserName = None
-        self.bUserAuthorized = False
+        self.bUserAuthorized = True
         self.ErrorMessage = ''
 
 
-class RowsWindow(QtWidgets.QMainWindow, UI.Ui_RowsWindow):
+class RowsWindow(QtWidgets.QMainWindow, UI.Ui_AddRowsWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -65,7 +63,28 @@ class RowsWindow(QtWidgets.QMainWindow, UI.Ui_RowsWindow):
             self.errorWindow.show()
 
 
+class EditRowsWindow(QtWidgets.QMainWindow, UI.Ui_EditRowsWindow):
+    def __init__(self, selected_row):
+        super().__init__()
+        self.setupUi(self)
 
+        self.pushButton_EditRow.clicked.connect(self.edit_rowdata)
+        self.LE_EditRow_Zipcode.setValidator(QIntValidator())
+        self.LE_EditRow_Customers.setValidator(QIntValidator())
+
+        logger.info(selected_row)
+
+        # self.LE_SubjectName.placeholderText()
+
+    def edit_rowdata(self):
+        logger.warning('WIP')
+
+
+    def keyPressEvent(self, event) -> None:
+        """Extending the method for simplified authorizatixon"""
+        if event.key() == QtCore.Qt.Key.Key_Return:
+            self.edit_rowdata()
+            event.accept()
 
 class AuthWindow(QtWidgets.QMainWindow, UI.Ui_AuthWindow):
     def __init__(self):
@@ -121,7 +140,6 @@ class ErrorWindow(QtWidgets.QWidget, UI.Ui_ErrorDialog):
         self.close()
 
 
-
 class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
     def __init__(self):
         logger.debug('New window: Main')
@@ -148,19 +166,6 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         self.checkBox_Type_Region.toggled.connect(self.get_active_filters)
         self.checkBox_Type_Area.toggled.connect(self.get_active_filters)
         self.checkBox_Type_Republic.toggled.connect(self.get_active_filters)
-
-        # TODO : HIDE
-        self.L_SubjectTypeTitle.hide()
-        self.checkBox_Type_AutonomousRegion.hide()
-        self.checkBox_Type_AutonomousDistrict.hide()
-        self.checkBox_Type_FederalCity.hide()
-        self.checkBox_Type_Region.hide()
-        self.checkBox_Type_Area.hide()
-        self.checkBox_Type_Republic.hide()
-        self.LE_Stats_Cities.hide()
-        self.LE_Stats_Customers.hide()
-        self.LE_Stats_AvgCustomers.hide()
-        self.LE_Stats_UniqueSubjects.hide()
 
         self.pushButton_Find.clicked.connect(self.search_by_filters)
         self.pushButton_Reset.clicked.connect(self.search_reset)
@@ -199,6 +204,7 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         self.get_active_filters()
         params = list()
         any_selected: bool = False
+        """
         if self.filters['check_AutonomousRegion']:
             params.append(f"instr(subject_name, 'автономная')")
         if self.filters['check_AutonomousDistrict']:
@@ -211,13 +217,13 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
             params.append(f"instr(subject_name, 'область')")
         if self.filters['check_Republic']:
             params.append(f"(instr(subject_name, 'республика') OR instr(subject_name, 'Республика'))")
-
+        """
         if self.filters['SubjectName']:
             any_selected = True
-            params.append(f"instr(subject_name, '{self.filters['SubjectName'].capitalize()}') OR instr(subject_name, '{self.filters['SubjectName'].lower()}')")
+            params.append(f"(instr(subject_name, '{self.filters['SubjectName'].capitalize()}') OR instr(subject_name, '{self.filters['SubjectName'].lower()}'))")
         if self.filters['CityName']:
             any_selected = True
-            params.append(f"instr(city_name, '{self.filters['CityName'].capitalize()}') OR instr(city_name, '{self.filters['CityName'].lower()}')")
+            params.append(f"(instr(city_name, '{self.filters['CityName'].capitalize()}') OR instr(city_name, '{self.filters['CityName'].lower()}'))")
         if self.filters['Zipcode']:
             any_selected = True
             params.append(f"instr(zipcode, '{self.filters['Zipcode']}')")
@@ -226,18 +232,20 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         result[0::2] = params
 
         query = f"SELECT * FROM mailposts WHERE {''.join(result)};"
+        logger.warning(query)
         if any_selected:
-            self.filtered_data = database.execute_read_query_dict(query)
-            self.table_widget_update(self.filtered_data)
+            filtered_data = database.execute_read_query_dict(query)
+            self.table_widget_update(filtered_data)
 
     def search_reset(self):
+        """
         self.checkBox_Type_AutonomousRegion.setChecked(False)
         self.checkBox_Type_AutonomousDistrict.setChecked(False)
         self.checkBox_Type_FederalCity.setChecked(False)
         self.checkBox_Type_Region.setChecked(False)
         self.checkBox_Type_Area.setChecked(False)
         self.checkBox_Type_Republic.setChecked(False)
-
+        """
         self.comboBox_SubjectName.setText('')
         self.comboBox_CityName.setText('')
         self.comboBox_Index.setText('')
@@ -247,18 +255,27 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
 
     def add_row(self):
         if session.bUserAuthorized:
-            logger.debug("New window: RowsWindow")
-            self.RowsWindow = RowsWindow()
-            self.RowsWindow.show()
-
+            logger.debug("New window: AddRowsWindow")
+            self.AddRowsWindow = RowsWindow()
+            self.AddRowsWindow.show()
         else:
             logger.warning('You are not logged in.')
             self.errorWindow = ErrorWindow("You are not logged in!")
             self.errorWindow.show()
 
     def edit_row(self):
+        selected_row = self.tableWidget.currentRow()
+
         if session.bUserAuthorized:
-            logger.debug('edit row')
+            if selected_row > -1:
+                logger.debug("New window: AddRowsWindow")
+
+                self.EditRowsWindow = EditRowsWindow(selected_row)
+                self.EditRowsWindow.show()
+            else:
+                logger.warning('The row was not selected')
+                self.errorWindow = ErrorWindow("The row was not selected")
+                self.errorWindow.show()
         else:
             logger.warning('You are not logged in.')
             self.errorWindow = ErrorWindow("You are not logged in!")
@@ -267,13 +284,13 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
     def delete_row(self):
         try:
             if session.bUserAuthorized:
-                self.selected_row = self.tableWidget.currentRow()
-                if self.selected_row > -1:
-                    self.selected_item_zipcode = self.tableWidget.item(self.selected_row, 2).text()
-                    query = f"DELETE FROM mailposts WHERE zipcode = '{self.selected_item_zipcode}'"
+                selected_row = self.tableWidget.currentRow()
+                if selected_row > -1:
+                    selected_item_zipcode = self.tableWidget.item(selected_row, 2).text()
+                    query = f"DELETE FROM mailposts WHERE zipcode = '{selected_item_zipcode}'"
                     database.execute_write_query(query)
 
-                    logger.info(f'Succesfully deleted row with zipcode "{self.selected_item_zipcode}"')
+                    logger.info(f'Succesfully deleted row with zipcode "{selected_item_zipcode}"')
                     self.table_widget_init()
             else:
                 self.errorWindow = ErrorWindow("You are not authorized!")
@@ -286,7 +303,6 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         logger.debug("New window: Authorization")
         self.AuthWindow = AuthWindow()
         self.AuthWindow.show()
-
 
     def menubar_exit(self):
         """Called when 'Exit' is pressed"""
@@ -301,26 +317,26 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         _Cities = "Населённых пунктов: "
         _AvgCustomers = "Ср. количество клиентов: "
 
-        self._UniqueSubjects_list = list(({item['subject_name']: item for item in data}.values()))
-        self._Mailposts_list = list(({item['zipcode']: item for item in data}.values()))
-        self._Customers_value = 0
+        _UniqueSubjects_list = list(({item['subject_name']: item for item in data}.values()))
+        _Mailposts_list = list(({item['zipcode']: item for item in data}.values()))
+        _Customers_value = 0
         for row in data:
-            self._Customers_value += row['customers']
+            _Customers_value += row['customers']
 
-        self._Cities_list = list(({item['city_name']: item for item in data}.values()))
+        _Cities_list = list(({item['city_name']: item for item in data}.values()))
 
-        self._UniqueSubjects_value = len(self._UniqueSubjects_list)
-        self._Mailposts_value = len(self._Mailposts_list)
-        self._Cities_value = len(self._Cities_list)
-        if self._Mailposts_value:
-            self._AvgCustomers_value = self._Customers_value / self._Mailposts_value
+        _UniqueSubjects_value = len(_UniqueSubjects_list)
+        _Mailposts_value = len(_Mailposts_list)
+        _Cities_value = len(_Cities_list)
+        if _Mailposts_value:
+            _AvgCustomers_value = _Customers_value / _Mailposts_value
         else:
-            self._AvgCustomers_value = 0
-        self.LE_Stats_UniqueSubjects.setText(_UniqueSubjects + str(self._UniqueSubjects_value))
-        self.LE_Stats_Mailposts.setText(_Mailposts + str(self._Mailposts_value))
-        self.LE_Stats_Customers.setText(_Customers + str(self._Customers_value))
-        self.LE_Stats_Cities.setText(_Cities + str(self._Cities_value))
-        self.LE_Stats_AvgCustomers.setText(_AvgCustomers + str(int(self._AvgCustomers_value)))
+            _AvgCustomers_value = 0
+        self.LE_Stats_UniqueSubjects.setText(_UniqueSubjects + str(_UniqueSubjects_value))
+        self.LE_Stats_Mailposts.setText(_Mailposts + str(_Mailposts_value))
+        self.LE_Stats_Customers.setText(_Customers + str(_Customers_value))
+        self.LE_Stats_Cities.setText(_Cities + str(_Cities_value))
+        self.LE_Stats_AvgCustomers.setText(_AvgCustomers + str(int(_AvgCustomers_value)))
 
     def table_widget_update(self, data: list):
         self.tableWidget.setRowCount(len(data))

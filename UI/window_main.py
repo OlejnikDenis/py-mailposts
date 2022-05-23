@@ -215,6 +215,19 @@ class Ui_MainWindow(object):
         self.menu.addAction(self.MenuBar_Exit)
         self.menubar.addAction(self.menu.menuAction())
 
+        # TODO : HIDE
+        self.L_SubjectTypeTitle.hide()
+        self.checkBox_Type_AutonomousRegion.hide()
+        self.checkBox_Type_AutonomousDistrict.hide()
+        self.checkBox_Type_FederalCity.hide()
+        self.checkBox_Type_Region.hide()
+        self.checkBox_Type_Area.hide()
+        self.checkBox_Type_Republic.hide()
+        self.LE_Stats_Cities.hide()
+        self.LE_Stats_Customers.hide()
+        self.LE_Stats_AvgCustomers.hide()
+        self.LE_Stats_UniqueSubjects.hide()
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
