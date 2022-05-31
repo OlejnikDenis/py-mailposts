@@ -195,6 +195,19 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
+        # TODO : HIDE
+        self.L_SubjectTypeTitle.hide()
+        self.checkBox_Type_AutonomousRegion.hide()
+        self.checkBox_Type_AutonomousDistrict.hide()
+        self.checkBox_Type_FederalCity.hide()
+        self.checkBox_Type_Region.hide()
+        self.checkBox_Type_Area.hide()
+        self.checkBox_Type_Republic.hide()
+        self.LE_Stats_Cities.hide()
+        self.LE_Stats_Customers.hide()
+        self.LE_Stats_AvgCustomers.hide()
+        self.LE_Stats_UniqueSubjects.hide()
+
         # Настройка TableWidget
         self.tableWidget.setColumnWidth(0, 175)
         self.tableWidget.setColumnWidth(1, 200)
@@ -230,13 +243,14 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
 
     def get_active_filters(self) -> dict:
         """Метод возвращает словарь со всеми активными фильтрами"""
+        """
         self.filters['check_AutonomousRegion'] = self.checkBox_Type_AutonomousRegion.isChecked()
         self.filters['check_AutonomousDistrict'] = self.checkBox_Type_AutonomousDistrict.isChecked()
         self.filters['check_FederalCity'] = self.checkBox_Type_FederalCity.isChecked()
         self.filters['check_Region'] = self.checkBox_Type_Region.isChecked()
         self.filters['check_Area'] = self.checkBox_Type_Area.isChecked()
         self.filters['check_Republic'] = self.checkBox_Type_Republic.isChecked()
-
+        """
         # self.filters['SubjectName'] = self.comboBox_SubjectName.currentText()
         self.filters['SubjectName'] = self.comboBox_SubjectName.text()
         self.filters['CityName'] = self.comboBox_CityName.text()
@@ -358,6 +372,10 @@ class MainWindow(QtWidgets.QMainWindow, UI.Ui_MainWindow):
                     logger.info(f'Succesfully deleted row with zipcode "{selected_item_zipcode}"')
                     # Обновляем таблицу
                     self.table_widget_init()
+                else:
+                    logger.warning('The row was not selected')
+                    self.errorWindow = ErrorWindow("Строка для удаления не выбрана")
+                    self.errorWindow.show()
             else:
                 logger.warning('You are not logged in.')
                 self.errorWindow = ErrorWindow("Ошибка:\nВы не авторизованы как администратор")

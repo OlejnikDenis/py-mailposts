@@ -174,12 +174,20 @@
               <property name="text">
                <string>Сбросить</string>
               </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../UI/icons/row_synchronize.png</normaloff>../UI/icons/row_synchronize.png</iconset>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="pushButton_Find">
               <property name="text">
                <string>Найти</string>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../UI/icons/row_search.png</normaloff>../UI/icons/row_search.png</iconset>
               </property>
              </widget>
             </item>
@@ -222,6 +230,16 @@
               <property name="text">
                <string>Добавить</string>
               </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../UI/icons/row_add.png</normaloff>../UI/icons/row_add.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
              </widget>
             </item>
             <item>
@@ -229,12 +247,20 @@
               <property name="text">
                <string>Изменить</string>
               </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../UI/icons/row_edit.png</normaloff>../UI/icons/row_edit.png</iconset>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="pushButton_RowDel">
               <property name="text">
                <string>Удалить</string>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../UI/icons/row_clear.png</normaloff>../UI/icons/row_clear.png</iconset>
               </property>
              </widget>
             </item>

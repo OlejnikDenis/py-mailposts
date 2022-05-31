@@ -1,0 +1,10 @@
+2022-05-31 10:22:06.823 | INFO     | __main__:<module>:461 - Application started!
+2022-05-31 10:22:06.837 | INFO     | __main__:__init__:17 - User session initialized
+2022-05-31 10:22:06.837 | INFO     | databasemanager:__init__:9 - Connection to database is established
+2022-05-31 10:22:06.841 | DEBUG    | __main__:__init__:194 - New window: Main
+2022-05-31 10:22:07.189 | INFO     | __main__:table_widget_update:450 - TableWidget updated!
+2022-05-31 10:40:37.146 | INFO     | __main__:<module>:461 - Application started!
+2022-05-31 10:40:37.178 | INFO     | __main__:__init__:17 - User session initialized
+2022-05-31 10:40:37.186 | INFO     | databasemanager:__init__:9 - Connection to database is established
+2022-05-31 10:40:37.190 | DEBUG    | __main__:__init__:194 - New window: Main
+2022-05-31 10:40:38.251 | INFO     | __main__:table_widget_update:450 - TableWidget updated!
